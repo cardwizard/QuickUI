@@ -35,7 +35,7 @@ def index()->FlaskResponse:
 
 if __name__ == '__main__':
     # Pick a random port number to avoid collisions
-    file_path = "../tests/files/choices_test.py"
+    file_path = "../tests/files/basic_test.py"
     ea = ExtractArgs(file_path)
 
     config = Config(ea.find_args())
