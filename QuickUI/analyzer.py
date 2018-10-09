@@ -47,7 +47,7 @@ class ExtractArgs:
         Returns:
             An ast CodeType object
         """
-        ast_head = compile(open(str(self.file_path), 'rb').read(), file_path, 'exec', ast.PyCF_ONLY_AST)
+        ast_head = compile(open(str(self.file_path), 'rb').read(), str(self.file_path), 'exec', ast.PyCF_ONLY_AST)
         return ast_head
 
     @staticmethod
@@ -205,7 +205,6 @@ class ExtractArgs:
         return parser_argument_list
 
 if __name__ == '__main__':
-    file_path = "../examples/choices_test.py"
+    file_path = "../tests/files/choices_test.py"
     ea = ExtractArgs(file_path)
     print(ea.find_args())
-
