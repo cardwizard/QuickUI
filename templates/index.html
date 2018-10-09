@@ -6,6 +6,7 @@
 
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
 
@@ -19,8 +20,8 @@
                                 <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>{{ i["parameter"] }}</a>
                             </div>
                             <div class="input-field col s9">
-                                <input id="{{ loop.index }}">
-                                <label for="{{ loop.index }}" id="label_{{ loop.index }}"></label>
+                                <input id="input_{{ loop.index - 1}}">
+                                <label for="input_{{ loop.index - 1}}" id="label_{{ loop.index }}"></label>
                             </div>
                         {% endfor %}
                     </div>
@@ -33,7 +34,24 @@
 
         function fill_input_boxes() {
             fields = {{ form_fields|safe }};
-            console.log(fields);
+
+            for (var i in fields) {
+                var element = fields[i];
+                var id = "#input_" + i.toString();
+
+                // 1. Set the placeholder value if help exists.
+                if ("help" in element) {
+                    $(id).attr("placeholder", element["help"]);
+                }
+
+                // 2. Add the compulsory attributes. Jinja sends booleans as a string
+
+                if ("required" in element) {
+                    if (element["required"] == "True") {
+                        $(id).prop("required", true);
+                    }
+                }
+            }
         }
         fill_input_boxes();
     </script>
