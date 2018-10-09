@@ -19,8 +19,8 @@
                                 <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>{{ i["parameter"] }}</a>
                             </div>
                             <div class="input-field col s9">
-                                <input placeholder='{{ i["help"] }}' id="{{ loop.index }}" type="text" class="validate">
-                                <label for="{{ loop.index }}"></label>
+                                <input id="{{ loop.index }}">
+                                <label for="{{ loop.index }}" id="label_{{ loop.index }}"></label>
                             </div>
                         {% endfor %}
                     </div>
@@ -28,4 +28,13 @@
             </div>
         </div>
     </body>
+
+    <script>
+
+        function fill_input_boxes() {
+            fields = {{ form_fields|safe }};
+            console.log(fields);
+        }
+        fill_input_boxes();
+    </script>
 </html>

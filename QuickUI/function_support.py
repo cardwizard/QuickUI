@@ -20,6 +20,6 @@ def check_function(parsed_value_arg: ast.Call)->Union[str, Dict]:
         return "Unknown Type"
     """
     if parsed_value_arg.func.id == "range":
-        return {"func_type": "range", "values": (parsed_value_arg.args[0].n, parsed_value_arg.args[1].n )}
+        return {"func_type": "range", "values": [parsed_value_arg.args[0].n, parsed_value_arg.args[1].n]}
     else:
         return "Unknown Type"
