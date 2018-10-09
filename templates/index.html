@@ -1,3 +1,31 @@
 <html>
-    <title>Quick UI</title>
+    <head>
+        <title>Quick UI</title>
+        <!-- Compiled and minified CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+        <!-- Compiled and minified JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row">
+                <form class="col s12">
+                    <div class="row">
+                        {% for i in form_fields %}
+                            <div class="input-field col s3">
+                                <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>{{ i["parameter"] }}</a>
+                            </div>
+                            <div class="input-field col s9">
+                                <input placeholder='{{ i["help"] }}' id="{{ loop.index }}" type="text" class="validate">
+                                <label for="{{ loop.index }}"></label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </form>>
+            </div>
+        </div>
+    </body>
 </html>
