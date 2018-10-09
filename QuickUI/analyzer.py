@@ -3,8 +3,10 @@
 #   Purpose: File to analyze a given file using Abstract Syntax Tree
 
 import ast
+
 from pathlib import Path
-from typing import Union, List, Dict, Any
+from typing import Union, List, Dict
+from QuickUI.function_support import check_function
 
 class IncorrectArgument(Exception):
     pass
@@ -86,7 +88,7 @@ class ExtractArgs:
         return True
 
     @staticmethod
-    def _extractor(parser_value_arg)->Any:
+    def _extractor(parser_value_arg)->Dict:
         """
         Function to extract the value depending on the data type. In some cases, the function
         might be called recursively as well.
@@ -109,6 +111,9 @@ class ExtractArgs:
 
         elif isinstance(parser_value_arg, ast.List):
             parsed_value = [ExtractArgs._extractor(x) for x in parser_value_arg.elts]
+
+        elif isinstance(parser_value_arg, ast.Call):
+            parsed_value = check_function(parser_value_arg)
 
         else:
             parsed_value = "Unknown Type"
@@ -200,7 +205,7 @@ class ExtractArgs:
         return parser_argument_list
 
 if __name__ == '__main__':
-    file_path = "../examples/basic_test.py"
+    file_path = "../examples/choices_test.py"
     ea = ExtractArgs(file_path)
     print(ea.find_args())
 
