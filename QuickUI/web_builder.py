@@ -5,6 +5,7 @@
 from flask import Flask, request, Response as FlaskResponse, jsonify, render_template, flash, redirect, url_for
 from random import randint
 from QuickUI.config import Config
+from QuickUI.analyzer import ExtractArgs
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
 
@@ -18,7 +19,7 @@ def status()->jsonify:
         Jsonified value
     """
     health = {
-                "healthy": app.config["FORM_FIELDS"]["test"],
+                "healthy": True,
                 "version": app.config["VERSION"]
              }
     return jsonify(health=health)
@@ -29,12 +30,15 @@ def index()->FlaskResponse:
     """
     Rendering the main index file to view the arg parser dashboard
     """
-    return render_template("index.html")
+    return render_template("index.html", form_fields=app.config["FORM_FIELDS"])
 
 
 if __name__ == '__main__':
     # Pick a random port number to avoid collisions
-    config = Config({"test": 1})
+    file_path = "../tests/files/basic_test.py"
+    ea = ExtractArgs(file_path)
+
+    config = Config(ea.find_args())
     app.config.from_object(config)
 
     port_number = randint(49152, 65535)

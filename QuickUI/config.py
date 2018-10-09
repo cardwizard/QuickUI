@@ -2,16 +2,16 @@
 #
 #   Purpose: Config files as required by the web builder
 
-from typing import Dict
+from typing import List
 
 class Config:
     """
-    Contains the details extracted by the analyzer in form of a dictionary.
+    Contains the details extracted by the analyzer in form of a List of dictionaries.
     Also maintains the version of the module
     """
     VERSION = "0.0.1"
 
-    def __init__(self, config_details: Dict):
+    def __init__(self, config_details: List):
         """
         Helps initialize the form_fields using the config_details variable
 
