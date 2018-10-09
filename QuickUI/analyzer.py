@@ -118,6 +118,9 @@ class ExtractArgs:
         else:
             parsed_value = "Unknown Type"
 
+        # Case to handle boolean issues in Javascript
+        parsed_value = str(parsed_value) if isinstance(parsed_value, bool) else parsed_value
+
         return parsed_value
 
     @staticmethod
