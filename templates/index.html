@@ -21,7 +21,6 @@
                             </div>
                             <div class="input-field col s9">
                                 <input id="input_{{ loop.index - 1}}">
-                                <label for="input_{{ loop.index - 1}}" id="label_{{ loop.index }}"></label>
                             </div>
                         {% endfor %}
                     </div>
@@ -32,6 +31,49 @@
 
     <script>
 
+        function add_placeholder(element, id) {
+            if (!("help" in element))
+                return;
+            $(id).attr("placeholder", element["help"]);
+        }
+
+        function add_required_check(element, id) {
+            if (!("required" in element))
+                return;
+
+            if (!(element["required"] == "True"))
+                return;
+
+            $(id).prop("required", true);
+        }
+
+        function add_data_type(element, id) {
+            if (!("type" in element))
+                return;
+
+            if (element["type"] == "str")
+                $(id).attr("type", "text");
+
+            if (element["type"] == "int") {
+                $(id).attr("type", "number");
+                $(id).attr("step", "1");
+            }
+
+            if (element["type"] == "float") {
+                $(id).attr("type", "number");
+            }
+
+            if (element["type"] == "bool") {
+                $(id).html(`
+                    <label>
+                        <input type="checkbox" />
+                        <span>Select this field</span>
+                     </label>
+                `);
+            }
+            console.log(element["type"]);
+        }
+
         function fill_input_boxes() {
             fields = {{ form_fields|safe }};
 
@@ -40,17 +82,13 @@
                 var id = "#input_" + i.toString();
 
                 // 1. Set the placeholder value if help exists.
-                if ("help" in element) {
-                    $(id).attr("placeholder", element["help"]);
-                }
+                add_placeholder(element, id);
 
-                // 2. Add the compulsory attributes. Jinja sends booleans as a string
+                // 2. Add the required attribute. Jinja sends booleans as a string
+                add_required_check(element, id);
 
-                if ("required" in element) {
-                    if (element["required"] == "True") {
-                        $(id).prop("required", true);
-                    }
-                }
+                // 3. Add a data type
+                add_data_type(element, id);
             }
         }
         fill_input_boxes();
