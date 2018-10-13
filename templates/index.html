@@ -16,11 +16,13 @@
                 <form class="col s12">
                     <div class="row">
                         {% for i in form_fields %}
-                            <div class="input-field col s3">
-                                <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>{{ i["parameter"] }}</a>
-                            </div>
-                            <div class="input-field col s9">
-                                <input id="input_{{ loop.index - 1}}">
+                            <div class="row" id="row_{{ loop.index-1 }}">
+                                <div class="input-field col s3">
+                                    <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>{{ i["parameter"] }}</a>
+                                </div>
+                                <div class="input-field col s9">
+                                    <input id="input_{{ loop.index - 1}}">
+                                </div>
                             </div>
                         {% endfor %}
                     </div>
@@ -37,6 +39,12 @@
             $(id).attr("placeholder", element["help"]);
         }
 
+        function add_default(element, id) {
+            if (!("default" in element))
+                return;
+            $(id).attr("value", JSON.stringify(element["default"]));
+        }
+
         function add_required_check(element, id) {
             if (!("required" in element))
                 return;
@@ -45,6 +53,12 @@
                 return;
 
             $(id).prop("required", true);
+        }
+
+        function cleanup_divs(id) {
+            var parent_id = $(id).parent().parent().attr("id");
+            $(id).parent().remove();
+            return parent_id;
         }
 
         function add_data_type(element, id) {
@@ -64,14 +78,15 @@
             }
 
             if (element["type"] == "bool") {
-                $(id).html(`
-                    <label>
-                        <input type="checkbox" />
-                        <span>Select this field</span>
-                     </label>
-                `);
+
+                var parent_id = cleanup_divs(id);
+                $("#" + parent_id).append(`
+                        <label>
+                            <input type="checkbox"/><span> Select this field </span>
+                        </label>
+                        `);
             }
-            console.log(element["type"]);
+
         }
 
         function fill_input_boxes() {
@@ -81,13 +96,16 @@
                 var element = fields[i];
                 var id = "#input_" + i.toString();
 
-                // 1. Set the placeholder value if help exists.
+                // 1. Set the placeholder value if default value exists.
                 add_placeholder(element, id);
 
-                // 2. Add the required attribute. Jinja sends booleans as a string
+                // 2. Set the default if it exists
+                add_default(element, id);
+
+                // 3. Add the required attribute. Jinja sends booleans as a string
                 add_required_check(element, id);
 
-                // 3. Add a data type
+                // 4. Add a data type
                 add_data_type(element, id);
             }
         }
