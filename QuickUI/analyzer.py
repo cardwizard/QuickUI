@@ -115,7 +115,17 @@ class ExtractArgs:
         elif isinstance(parser_value_arg, ast.Call):
             parsed_value = check_function(parser_value_arg)
 
+        elif isinstance(parser_value_arg, ast.Num):
+            parsed_value = parser_value_arg.n
+
+        elif isinstance(parser_value_arg, ast.Dict):
+            parsed_value = {ExtractArgs._extractor(x): ExtractArgs._extractor(y) for x, y in zip(parser_value_arg.keys, parser_value_arg.values)}
+
+        elif isinstance(parser_value_arg, ast.Tuple):
+            parsed_value = [ExtractArgs._extractor(x) for x in parser_value_arg.elts]
+
         else:
+            print(parser_value_arg)
             parsed_value = "Unknown Type"
 
         # Case to handle boolean issues in Javascript
@@ -208,6 +218,6 @@ class ExtractArgs:
         return parser_argument_list
 
 if __name__ == '__main__':
-    file_path = "../tests/files/choices_test.py"
+    file_path = "../tests/files/basic_test.py"
     ea = ExtractArgs(file_path)
     print(ea.find_args())
