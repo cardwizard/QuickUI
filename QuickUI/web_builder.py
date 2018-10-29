@@ -33,12 +33,22 @@ def index()->FlaskResponse:
     return render_template("index.html", form_fields=app.config["FORM_FIELDS"])
 
 
+@app.route("/run_script")
+def run_script()->FlaskResponse:
+    """
+    Running the script with the passed arguments
+    """
+
+    pass
+
+
 if __name__ == '__main__':
     # Pick a random port number to avoid collisions
     file_path = "../tests/files/basic_test.py"
     ea = ExtractArgs(file_path)
 
-    config = Config(ea.find_args())
+    config = Config(ea.find_args(), file_path)
+    print(ea.find_args())
     app.config.from_object(config)
 
     port_number = randint(49152, 65535)

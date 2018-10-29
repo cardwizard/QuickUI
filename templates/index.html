@@ -13,20 +13,32 @@
     <body>
         <div class="container">
             <div class="row">
-                <form class="col s12">
+                <form id="submit-form" class="col s12">
                     <div class="row">
                         {% for i in form_fields %}
                             <div class="row" id="row_{{ loop.index-1 }}">
                                 <div class="input-field col s3">
                                     <a class="waves-effect waves-light btn"><i class="material-icons left">cloud</i>{{ i["parameter"] }}</a>
                                 </div>
-                                <div class="input-field col s9">
-                                    <input id="input_{{ loop.index - 1}}">
+                                <div class="field col s9">
+                                    {%if (i["type"] == "bool") %}
+                                    <label>
+                                        <input id="input_{{ loop.index - 1}}">
+                                        <span>Enable this</span>
+                                    </label>
+                                    {% else %}
+                                        <input id="input_{{ loop.index - 1}}">
+                                    {% endif %}
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
-                </form>>
+                    <div class="run_script">
+                        <button id="btn-submit" class="btn btn-small waves-effect waves-light" type="submit" name="action">Submit and Run Script
+                            <i class="material-icons right">send</i>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </body>
@@ -42,7 +54,28 @@
         function add_default(element, id) {
             if (!("default" in element))
                 return;
-            $(id).attr("value", JSON.stringify(element["default"]));
+
+            let default_value = element["default"];
+
+            if ((element["type"] == "tuple") || (element["type"] == "dict") ||
+                    (element["type"] == "list") || (element["type"] == "json"))
+
+                default_value = JSON.stringify(default_value);
+
+            if (element["type"] == "bool")
+            {
+                if (default_value == "True")
+                {
+                    default_value = 1;
+                    console.log(default_value);
+                }
+                else
+                {
+                    default_value = 0;
+                    console.log(default_value);
+                }
+            }
+            $(id).attr("value", default_value);
         }
 
         function add_required_check(element, id) {
@@ -78,13 +111,7 @@
             }
 
             if (element["type"] == "bool") {
-
-                var parent_id = cleanup_divs(id);
-                $("#" + parent_id).append(`
-                        <label>
-                            <input type="checkbox"/><span> Select this field </span>
-                        </label>
-                        `);
+                $(id).attr("type", "checkbox");
             }
 
         }
@@ -95,6 +122,7 @@
             for (var i in fields) {
                 var element = fields[i];
                 var id = "#input_" + i.toString();
+                $(id).attr("name", element["parameter"]);
 
                 // 1. Set the placeholder value if default value exists.
                 add_placeholder(element, id);
@@ -109,6 +137,26 @@
                 add_data_type(element, id);
             }
         }
+
+        const submitBtn = $('#btn-submit');
+        const submitForm = $('#submit-form');
+        const input0 = $('#input_0');
+
+        $('#submit-form').submit(function(e) {
+            e.preventDefault();
+            // get all the inputs into an array.
+            var $inputs = $('#submit-form :input');
+
+            // not sure if you wanted this, but I thought I'd add it.
+            // get an associative array of just the values.
+            var values = {};
+            $inputs.each(function() {
+                values[this.name] = $(this).val();
+            });
+            console.log(values);
+
+        });
+
         fill_input_boxes();
     </script>
 </html>
