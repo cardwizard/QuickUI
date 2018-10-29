@@ -11,12 +11,16 @@ class Config:
     """
     VERSION = "0.0.1"
 
-    def __init__(self, config_details: List):
+    def __init__(self, config_details: List, file_path: str):
         """
         Helps initialize the form_fields using the config_details variable
 
         Args:
             config_details: Contains all key/value pairs created by parsing a documents argparse.
+            file_path: Full path of the file which we wish to call with parameters.
 
+        Returns:
+            None
         """
         Config.FORM_FIELDS = config_details
+        Config.FILE_PATH = file_path
