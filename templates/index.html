@@ -145,17 +145,24 @@
             // get all the inputs into an array.
             var $inputs = $('#submit-form :input');
 
-            // not sure if you wanted this, but I thought I'd add it.
             // get an associative array of just the values.
+
             var values = {};
+
             $inputs.each(function() {
                 if (this.type == "checkbox")
                     values[this.name] = $(this).prop("checked");
+                else if (this.type == "number")
+                    values[this.name] = parseFloat($(this).val());
+                else if (this.type == "text")
+                    values[this.name] = String($(this).val());
                 else
-                    values[this.name] = $(this).val();
+                {
+                    console.log($(this).val());
+                    // values[this.name] = JSON.parse($(this).val());
+                }
             });
             console.log(values);
-
         });
 
         fill_input_boxes();
