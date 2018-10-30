@@ -6,7 +6,7 @@
 
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
 
@@ -154,17 +154,27 @@
                     values[this.name] = $(this).prop("checked");
                 else if (this.type == "number")
                     values[this.name] = parseFloat($(this).val());
-                else if (this.type == "text")
-                    values[this.name] = String($(this).val());
                 else
-                {
-                    console.log($(this).val());
-                    // values[this.name] = JSON.parse($(this).val());
-                }
+                    values[this.name] = String($(this).val());
             });
-            console.log(values);
+
+            run_step(values);
         });
 
+        function run_step(values)
+        {
+            $.ajax({
+                url: '/run_script',
+                type: "POST",
+                data: values,
+                async: true,
+                success: function (data) {
+                    }
+            });
+        }
+
         fill_input_boxes();
+
+
     </script>
 </html>

@@ -33,12 +33,13 @@ def index()->FlaskResponse:
     return render_template("index.html", form_fields=app.config["FORM_FIELDS"])
 
 
-@app.route("/run_script")
+@app.route("/run_script", methods=["POST"])
 def run_script()->FlaskResponse:
     """
     Running the script with the passed arguments
     """
-
+    data = request.form
+    print(app.config["FORM_FIELDS"])
     pass
 
 
