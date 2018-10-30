@@ -11,7 +11,7 @@ if __name__ == '__main__':
 
     parser.add_argument('--check-int', help='integer help', type=int, required=True, default=2)
     parser.add_argument('--check-string', help="string help", type=str, required=False, default="check")
-    parser.add_argument('--check-bool', help="bool help and required is not mentioned", type=bool, default=False)
+    parser.add_argument('--check-bool', help="bool help and required is not mentioned", type=bool, default=True)
     parser.add_argument('--check-float', help="float help and required is not mentioned", type=float, default=1.3)
     parser.add_argument('--check-json', help="json help", type=json, default=[{"check1": 1, "check2": 2},
                                                                               {"check3": 3, "check4": 4}])

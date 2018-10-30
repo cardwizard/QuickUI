@@ -48,7 +48,7 @@ if __name__ == '__main__':
     ea = ExtractArgs(file_path)
 
     config = Config(ea.find_args(), file_path)
-    print(ea.find_args())
+
     app.config.from_object(config)
 
     port_number = randint(49152, 65535)

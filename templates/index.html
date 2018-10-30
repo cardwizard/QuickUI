@@ -66,16 +66,14 @@
             {
                 if (default_value == "True")
                 {
-                    default_value = 1;
-                    console.log(default_value);
+                    default_value = true;
+                    $(id).attr("checked", "checked");
                 }
                 else
-                {
-                    default_value = 0;
-                    console.log(default_value);
-                }
+                    default_value = false;
             }
-            $(id).attr("value", default_value);
+            if (default_value)
+                $(id).attr("value", default_value);
         }
 
         function add_required_check(element, id) {
@@ -151,7 +149,10 @@
             // get an associative array of just the values.
             var values = {};
             $inputs.each(function() {
-                values[this.name] = $(this).val();
+                if (this.type == "checkbox")
+                    values[this.name] = $(this).prop("checked");
+                else
+                    values[this.name] = $(this).val();
             });
             console.log(values);
 
