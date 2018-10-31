@@ -7,7 +7,16 @@
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script src="https://unpkg.com/jquery.terminal@1.x.x/js/jquery.terminal.min.js"></script>
+        <link href="https://unpkg.com/jquery.terminal@1.x.x/css/jquery.terminal.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <style>
+            .terminal>div {
+                min-height: 50%;
+                max-height: 50%;
+                overflow: auto;
+            }
+        </style>
     </head>
 
     <body>
@@ -40,7 +49,11 @@
                     </div>
                 </form>
             </div>
+            <div class="row">
+                <div id="terminal"></div>
+            </div>
         </div>
+
     </body>
 
     <script>
@@ -168,13 +181,15 @@
                 type: "POST",
                 data: values,
                 async: true,
-                success: function (data) {
-                    }
+                success: function (data) {}
             });
         }
 
         fill_input_boxes();
 
+        $('#terminal').terminal(function(command) {
+            this.echo('foo');
+        });
 
     </script>
 </html>
