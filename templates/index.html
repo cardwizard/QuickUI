@@ -7,9 +7,11 @@
         <!-- Compiled and minified JavaScript -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js"></script>
         <script src="https://unpkg.com/jquery.terminal@1.x.x/js/jquery.terminal.min.js"></script>
         <link href="https://unpkg.com/jquery.terminal@1.x.x/css/jquery.terminal.min.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
         <style>
             .terminal>div {
                 min-height: 50%;
@@ -49,9 +51,9 @@
                     </div>
                 </form>
             </div>
-            <div class="row">
-                <div id="terminal"></div>
-            </div>
+
+            <div class="row" id="terminals"></div>
+            <div id="log"></div>
         </div>
 
     </body>
@@ -174,22 +176,41 @@
             run_step(values);
         });
 
-        function run_step(values)
-        {
-            $.ajax({
-                url: '/run_script',
-                type: "POST",
-                data: values,
-                async: true,
-                success: function (data) {}
-            });
+        function getRandomInt(min, max) {
+          min = Math.ceil(min);
+          max = Math.floor(max);
+          return Math.floor(Math.random() * (max - min)) + min; //The maximum is exclusive and the minimum is inclusive
         }
 
+        function run_step(values)
+        {
+
+            // 1. Create a new terminal object
+            var term_id = "terminal_" + String(getRandomInt(0, 1000));
+            $('#terminals').prepend("<div id='" + term_id + "'> </div><br>");
+
+            var term = $('#' + term_id).terminal({
+                python: function(...args) {
+                    var options = $.terminal.parse_options(args);
+                    console.log(options);
+                }
+            }, {checkArity: false});
+
+            // 2. Clear the terminal
+            term.exec("clear");
+
+            // 3. Add term_id to the values field
+            values["term_id"] = term_id;
+
+            // 3. Call the run script function
+            var socket = io.connect('http://' + document.domain + ':' + location.port + '/stream');
+            console.log("Established a connection");
+
+            socket.emit("run_script", {data: values});
+            socket.on("process_output", function(msg) {
+                term.echo(msg.data);
+            });
+        }
         fill_input_boxes();
-
-        $('#terminal').terminal(function(command) {
-            this.echo('foo');
-        });
-
     </script>
 </html>

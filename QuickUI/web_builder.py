@@ -3,11 +3,21 @@
 #   Purpose: Python APIs to build the web page to be rendered
 
 from flask import Flask, request, Response as FlaskResponse, jsonify, render_template, flash, redirect, url_for
-from random import randint
+from flask_socketio import SocketIO, emit
 from QuickUI.config import Config
 from QuickUI.analyzer import ExtractArgs
+from typing import Dict
+from subprocess import Popen, PIPE
+
+import sys
+import threading
+import json
+
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
+socketio = SocketIO(app, logger=True, engineio_logger=True, async_mode="threading")
+
+thread = None
 
 @app.route("/v1/status")
 def status()->jsonify:
@@ -33,24 +43,49 @@ def index()->FlaskResponse:
     return render_template("index.html", form_fields=app.config["FORM_FIELDS"])
 
 
-@app.route("/run_script", methods=["POST"])
-def run_script()->FlaskResponse:
-    """
-    Running the script with the passed arguments
-    """
-    data = request.form
-    print(app.config["FORM_FIELDS"])
-    pass
+@socketio.on('connect', namespace='/stream')
+def test_connect():
+    print("Client Connected")
 
+
+def background_stuff(args):
+    print("Background thread")
+    print()
+    with app.test_request_context("/"):
+        for i in range(500):
+            p = Popen(args, stdout=PIPE)
+            for line in iter(p.stdout.readline, b''):
+                sys.stdout.write(line.decode())
+                print(line.decode())
+                socketio.emit("process_output", {'data': json.dumps(line.decode())}, namespace="/stream")
+
+
+@socketio.on('run_script', namespace='/stream')
+def test_message(message: Dict):
+    global thread
+    args = ["python", app.config["FILE_PATH"]]
+
+    for argument, value in message["data"].items():
+        if argument == "term_id" or argument == "action":
+            continue
+        args.append(str(argument))
+        args.append(str(value))
+
+    emit('process_output', {'data': json.dumps(args)})
+    if thread is None:
+        thread = threading.Thread(target=background_stuff, args=[args])
+        thread.start()
+
+@socketio.on('disconnect', namespace='/stream')
+def test_disconnect():
+    print('Client disconnected')
 
 if __name__ == '__main__':
     # Pick a random port number to avoid collisions
-    file_path = "../tests/files/basic_test.py"
+    file_path = "C:\\Users\\AadeshBagmar\\PycharmProjects\\QuickUI\\tests\\files\\output_basics.py"
     ea = ExtractArgs(file_path)
-
     config = Config(ea.find_args(), file_path)
-
     app.config.from_object(config)
 
-    port_number = randint(49152, 65535)
-    app.run(debug=False, port=randint(49152, 65535))
+    port_number = 5000
+    socketio.run(app, port=port_number)

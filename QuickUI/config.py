@@ -3,6 +3,8 @@
 #   Purpose: Config files as required by the web builder
 
 from typing import List
+from pathlib import Path
+
 
 class Config:
     """
@@ -23,4 +25,4 @@ class Config:
             None
         """
         Config.FORM_FIELDS = config_details
-        Config.FILE_PATH = file_path
+        Config.FILE_PATH = str(Path(file_path).absolute())
