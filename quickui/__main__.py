@@ -14,8 +14,8 @@ def main():
     port_number = os.environ.get("PORT", 8756)
 
     if len(sys.argv) < 2:
-        print("Launching the uploader page")
-        socketio.run(app, port_number)
+        print("Please use the following syntax: ")
+        print("python -m quickui my-awesome-project.py")
         return
 
     file_path = sys.argv[1]
