@@ -218,6 +218,6 @@ class ExtractArgs:
         return parser_argument_list
 
 if __name__ == '__main__':
-    file_path = "../tests/files/basic_test.py"
+    file_path = "../tests/files/output_basics.py"
     ea = ExtractArgs(file_path)
     print(ea.find_args())

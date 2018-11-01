@@ -173,7 +173,13 @@
 
             $inputs.each(function() {
                 if (this.type == "checkbox")
-                    values[this.name] = $(this).prop("checked");
+                {
+                    var extracted_value = $(this).prop("checked");
+                    if (extracted_value)
+                        values[this.name] = "True";
+                    else
+                        values[this.name] = "";
+                }
                 else if (this.type == "number")
                     values[this.name] = parseFloat($(this).val());
                 else
