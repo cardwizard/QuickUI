@@ -18,14 +18,18 @@ def main():
     file_path = sys.argv[1]
     print(file_path)
     print(os.getcwd())
+
     ea = ExtractArgs(file_path)
     config = Config(ea.find_args(), file_path)
     app.config.from_object(config)
 
+
     if len(sys.argv) > 2:
         port_number = sys.argv[2]
     else:
-        port_number = 8765
+        port_number = os.environ.get("PORT", 8756)
+    print(port_number)
+
     socketio.run(app, port=port_number)
 
 
