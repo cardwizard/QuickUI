@@ -42,4 +42,7 @@ In case, your parser mentions that a particular field is required, `QuickUI` add
 In case there is an error, it will be shown in the interface itself highlighted in red!
 <img src="https://user-images.githubusercontent.com/7254105/47856737-ebfd7e80-de0d-11e8-96a8-d8c50290d18a.png">
 
+## Watch it in action!
+![](Demo.gif)
+
 **Developer**: [Aadesh M Bagmar](https://github.com/cardwizard)
