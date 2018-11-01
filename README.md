@@ -27,7 +27,7 @@ In case there is an error, it will be shown in the interface itself highlighted 
 
 Another cool thing that you can do with this tool is, since it exposes a server, you can instantly `ngrok` it.
 So, in case there is a python file which you need to run on your system, you can run the server and host it over the internet.
-The QuickUI dashboard is `Mobile Friendly` which will make it possible for you to run your scripts from your phone!
+The QuickUI dashboard is `Mobile Friendly` which will make it possible for you to run your scripts from your phone!  
 <img src="https://user-images.githubusercontent.com/7254105/47857353-67136480-de0f-11e8-83f3-fc0f7332f6c2.png" width="200">
 
 ## How does it work?
