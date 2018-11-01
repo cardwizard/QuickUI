@@ -57,7 +57,8 @@ def background_stuff(args):
         p = Popen(args, stdout=PIPE)
         for line in iter(p.stdout.readline, b''):
             sys.stdout.write(line.decode())
-            socketio.emit("process_output", {'data': json.dumps(line.decode().strip())}, namespace="/stream")
+            socketio.emit("process_output", {'data': json.loads(json.dumps(line.decode().strip()))},
+                          namespace="/stream")
         print("Thread run completed")
         socketio.emit("process_output", {"data": "Process Run Completed."}, namespace="/stream")
 
