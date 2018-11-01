@@ -7,6 +7,7 @@ from quickui.config import Config
 from quickui.analyzer import ExtractArgs
 from quickui.web_builder import app, socketio
 
+import os
 
 def main():
     if len(sys.argv) < 2:
@@ -15,7 +16,8 @@ def main():
         return
 
     file_path = sys.argv[1]
-
+    print(file_path)
+    print(os.getcwd())
     ea = ExtractArgs(file_path)
     config = Config(ea.find_args(), file_path)
     app.config.from_object(config)
