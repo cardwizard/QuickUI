@@ -4,8 +4,6 @@
 
 import argparse
 import time
-from tqdm import tqdm
-
 
 if __name__ == '__main__':
 
