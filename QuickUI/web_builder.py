@@ -81,7 +81,11 @@ def on_message(message: Dict):
         if argument == "term_id" or argument == "action":
             continue
         args.append(str(argument))
-        args.append(str(value))
+
+        if value:
+            args.append(str(value))
+        else:
+            args.append("")
 
     emit('process_output', {'data': " ".join([str(x) for x in args])})
 
