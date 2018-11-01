@@ -8,7 +8,11 @@ from quickui.analyzer import ExtractArgs
 from quickui.web_builder import app, socketio
 
 
-if __name__ == '__main__':
+def main():
+    if len(sys.argv) < 2:
+        print("Please enter your file name separated by space. e.g.")
+        print("python -m quickui cool-python-file.py")
+        return
 
     file_path = sys.argv[1]
     ea = ExtractArgs(file_path)
@@ -17,3 +21,7 @@ if __name__ == '__main__':
 
     port_number = 81194
     socketio.run(app, port=port_number)
+
+
+if __name__ == '__main__':
+    main()
