@@ -2,12 +2,13 @@
 #
 #   Purpose: Python APIs to build the web page to be rendered
 
-from flask import Flask, request, Response as FlaskResponse, jsonify, render_template, flash, redirect, url_for
+from flask import Flask, Response as FlaskResponse, jsonify, render_template
 from flask_socketio import SocketIO, emit
 from QuickUI.config import Config
 from QuickUI.analyzer import ExtractArgs
 from typing import Dict
 from subprocess import Popen, PIPE
+from pathlib import Path
 
 import sys
 import threading
@@ -41,7 +42,7 @@ def index()->FlaskResponse:
     """
     Rendering the main index file to view the arg parser dashboard
     """
-    return render_template("index.html", form_fields=app.config["FORM_FIELDS"])
+    return render_template("index.html", form_fields=app.config["FORM_FIELDS"], file_path=Path(app.config["FILE_PATH"]).name)
 
 
 @socketio.on('connect', namespace='/stream')
