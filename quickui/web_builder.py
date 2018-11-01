@@ -4,8 +4,8 @@
 
 from flask import Flask, Response as FlaskResponse, jsonify, render_template
 from flask_socketio import SocketIO, emit
-from QuickUI.config import Config
-from QuickUI.analyzer import ExtractArgs
+from quickui.config import Config
+from quickui.analyzer import ExtractArgs
 from typing import Dict
 from subprocess import Popen, PIPE, CalledProcessError
 from pathlib import Path
