@@ -21,7 +21,7 @@ def extract_investments(args)->pd.DataFrame:
         df = df[df.all_sharks.str.contains("Kevin O'Leary")]
 
     if args.barabara_corcoran:
-        df = df[df.all_sharks.str.contains("Mark Cuban")]
+        df = df[df.all_sharks.str.contains("Barbara Corcoran")]
 
     if args.lori_greiner:
         df = df[df.all_sharks.str.contains("Lori Greiner")]
