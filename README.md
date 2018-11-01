@@ -1,6 +1,6 @@
 # Quick UI
 
-UI to CLI in 1 click
+CLI to UI in 1 click
 ---
 
 ![](QuickUI.png)
