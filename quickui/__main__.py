@@ -19,7 +19,7 @@ def main():
     config = Config(ea.find_args(), file_path)
     app.config.from_object(config)
 
-    port_number = 8765
+    port_number = 3000
     socketio.run(app, port=port_number)
 
 
