@@ -46,26 +46,34 @@ def index()->FlaskResponse:
 
 
 @socketio.on('connect', namespace='/stream')
-def test_connect():
+def on_connect():
+    """
+    Notifies when a connection is established to the frontend socket
+    """
     print("Client Connected")
 
 
 def background_stuff(args):
+    """
+    Background thread which actually runs the python process
+    """
     print("Background thread")
     socketio.emit("process_output", {"data": "Output ->"}, namespace="/stream")
 
     with app.test_request_context("/"):
         p = Popen(args, stdout=PIPE)
+
         for line in iter(p.stdout.readline, b''):
             sys.stdout.write(line.decode())
             socketio.emit("process_output", {'data': json.loads(json.dumps(line.decode().strip()))},
                           namespace="/stream")
+
         print("Thread run completed")
         socketio.emit("process_output", {"data": "Process Run Completed."}, namespace="/stream")
 
 
 @socketio.on('run_script', namespace='/stream')
-def test_message(message: Dict):
+def on_message(message: Dict):
     global thread
     args = ["python", app.config["FILE_PATH"]]
 
@@ -83,7 +91,7 @@ def test_message(message: Dict):
 
 
 @socketio.on('disconnect', namespace='/stream')
-def test_disconnect():
+def on_disconnect():
     print('Client disconnected')
 
 

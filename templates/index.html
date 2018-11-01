@@ -221,7 +221,6 @@
             var term = $('#' + term_id).terminal({
                 python: function(...args) {
                     var options = $.terminal.parse_options(args);
-                    console.log(options);
                 }
             }, {checkArity: false});
 
@@ -234,15 +233,12 @@
             values["term_id"] = term_id;
 
             socket.connect();
-            console.log("Established a connection");
 
             socket.emit("run_script", {data: values});
             socket.on("process_output", function(msg) {
                 term.echo(msg.data);
-                console.log(msg.data);
                 if (msg.data == "Process Run Completed.")
                 {
-                    console.log("Closing the connection");
                     socket.disconnect();
                     socket.off("process_output");
                 }
