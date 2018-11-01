@@ -55,7 +55,7 @@ def pretty_print(df):
         print("Company: {}, {}".format(data["title"], data["location"]))
         print("-    Website: {}".format(data["website"]))
         print("-    Entrepreneurs: {}".format(data["entrepreneurs"]))
-        print("-    Valuation: {} (${} for {})".format(data["valuation"], data["askedFor"], data["exchangeForStake"]))
+        print("-    Valuation: {} (${} for {}%)".format(data["valuation"], data["askedFor"], data["exchangeForStake"]))
         print("-    Season: {}".format(data["season"]))
         print("-    Category: {}".format(data["category"]))
         print("-    Description: {}".format(data["description"]))
