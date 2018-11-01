@@ -7,7 +7,7 @@ from flask_socketio import SocketIO, emit
 from QuickUI.config import Config
 from QuickUI.analyzer import ExtractArgs
 from typing import Dict
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, CalledProcessError
 from pathlib import Path
 
 import sys
@@ -16,7 +16,7 @@ import json
 
 
 app = Flask(__name__, template_folder="../templates", static_folder="../static")
-socketio = SocketIO(app, logger=True, engineio_logger=True, async_mode="threading")
+socketio = SocketIO(app, logger=True, async_mode="threading")
 
 thread = None
 
@@ -61,14 +61,20 @@ def background_stuff(args):
     socketio.emit("process_output", {"data": "Output ->"}, namespace="/stream")
 
     with app.test_request_context("/"):
-        p = Popen(args, stdout=PIPE)
+        try:
+            p = Popen(args, stdout=PIPE, stderr=PIPE)
 
-        for line in iter(p.stdout.readline, b''):
-            sys.stdout.write(line.decode())
-            socketio.emit("process_output", {'data': json.loads(json.dumps(line.decode().strip()))},
-                          namespace="/stream")
+            for line in iter(p.stdout.readline, b''):
+                socketio.emit("process_output", {'data': json.loads(json.dumps(line.decode().strip()))},
+                              namespace="/stream")
 
-        print("Thread run completed")
+            for line in iter(p.stderr.readline, b''):
+                socketio.emit("process_output", {'data': {"error": json.loads(json.dumps(line.decode().strip()))}},
+                              namespace="/stream")
+
+        except CalledProcessError as e:
+            print(e.__str__())
+
         socketio.emit("process_output", {"data": "Process Run Completed."}, namespace="/stream")
 
 
