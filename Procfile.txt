@@ -1,1 +1,0 @@
-web: python -m quickui examples/investment_portfolio.py

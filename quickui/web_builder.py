@@ -106,7 +106,7 @@ def on_disconnect():
 
 if __name__ == '__main__':
     # Pick a random port number to avoid collisions
-    file_path = "C:\\Users\\AadeshBagmar\\PycharmProjects\\QuickUI\\examples\\investment_portfolio.py"
+    file_path = "..\\examples\\investment_portfolio.py"
     ea = ExtractArgs(file_path)
     config = Config(ea.find_args(), file_path)
     app.config.from_object(config)

@@ -15,11 +15,15 @@ def main():
         return
 
     file_path = sys.argv[1]
+
     ea = ExtractArgs(file_path)
     config = Config(ea.find_args(), file_path)
     app.config.from_object(config)
 
-    port_number = 3000
+    if len(sys.argv) > 2:
+        port_number = sys.argv[2]
+    else:
+        port_number = 8765
     socketio.run(app, port=port_number)
 
 
