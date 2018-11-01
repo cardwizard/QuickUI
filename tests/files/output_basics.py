@@ -13,6 +13,7 @@ if __name__ == '__main__':
     parser.add_argument('--check-string', help="string help", type=str, required=False, default="check")
 
     args = parser.parse_args()
+
     for i in range(10):
         print(args.check_int)
         time.sleep(2)
