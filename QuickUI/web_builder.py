@@ -19,6 +19,7 @@ socketio = SocketIO(app, logger=True, engineio_logger=True, async_mode="threadin
 
 thread = None
 
+
 @app.route("/v1/status")
 def status()->jsonify:
     """
@@ -50,14 +51,15 @@ def test_connect():
 
 def background_stuff(args):
     print("Background thread")
-    print()
+    socketio.emit("process_output", {"data": "Output ->"}, namespace="/stream")
+
     with app.test_request_context("/"):
-        for i in range(500):
-            p = Popen(args, stdout=PIPE)
-            for line in iter(p.stdout.readline, b''):
-                sys.stdout.write(line.decode())
-                print(line.decode())
-                socketio.emit("process_output", {'data': json.dumps(line.decode())}, namespace="/stream")
+        p = Popen(args, stdout=PIPE)
+        for line in iter(p.stdout.readline, b''):
+            sys.stdout.write(line.decode())
+            socketio.emit("process_output", {'data': json.dumps(line.decode().strip())}, namespace="/stream")
+        print("Thread run completed")
+        socketio.emit("process_output", {"data": "Process Run Completed."}, namespace="/stream")
 
 
 @socketio.on('run_script', namespace='/stream')
@@ -71,14 +73,17 @@ def test_message(message: Dict):
         args.append(str(argument))
         args.append(str(value))
 
-    emit('process_output', {'data': json.dumps(args)})
-    if thread is None:
+    emit('process_output', {'data': " ".join([str(x) for x in args])})
+
+    if thread is None or not thread.is_alive():
         thread = threading.Thread(target=background_stuff, args=[args])
         thread.start()
+
 
 @socketio.on('disconnect', namespace='/stream')
 def test_disconnect():
     print('Client disconnected')
+
 
 if __name__ == '__main__':
     # Pick a random port number to avoid collisions

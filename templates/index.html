@@ -161,7 +161,6 @@
             var $inputs = $('#submit-form :input');
 
             // get an associative array of just the values.
-
             var values = {};
 
             $inputs.each(function() {
@@ -184,7 +183,6 @@
 
         function run_step(values)
         {
-
             // 1. Create a new terminal object
             var term_id = "terminal_" + String(getRandomInt(0, 1000));
             $('#terminals').prepend("<div id='" + term_id + "'> </div><br>");
@@ -198,19 +196,30 @@
 
             // 2. Clear the terminal
             term.exec("clear");
+            term.echo("----------------------------------------------------------");
+            term.echo("Running ->");
 
             // 3. Add term_id to the values field
             values["term_id"] = term_id;
 
-            // 3. Call the run script function
-            var socket = io.connect('http://' + document.domain + ':' + location.port + '/stream');
+            socket.connect();
             console.log("Established a connection");
 
             socket.emit("run_script", {data: values});
             socket.on("process_output", function(msg) {
                 term.echo(msg.data);
+                console.log(msg.data);
+                if (msg.data == "Process Run Completed.")
+                {
+                    console.log("Closing the connection");
+                    socket.disconnect();
+                    socket.off("process_output");
+                }
             });
         }
         fill_input_boxes();
+
+        // 4. Call the run script function
+        var socket = io.connect('http://' + document.domain + ':' + location.port + '/stream');
     </script>
 </html>
