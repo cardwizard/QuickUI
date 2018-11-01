@@ -12,6 +12,7 @@
         <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/socketio.js') }}"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='js/terminal.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='js/unix-formatting.js') }}"></script>
     </head>
 
     <body>
@@ -231,7 +232,7 @@
             }, {checkArity: false});
 
             // 2. Clear the terminal
-            term.exec("clear");
+            term.clear();
             term.echo("----------------------------------------------------------");
             term.echo("Running ->");
 
@@ -242,12 +243,20 @@
 
             socket.emit("run_script", {data: values});
             socket.on("process_output", function(msg) {
-                term.echo(msg.data);
+
+                if (typeof(msg.data) == "object") {
+                    term.echo('[[b;red;]' + msg.data.error + ']');
+                }
+                else
+                    term.echo(msg.data);
+
                 if (msg.data == "Process Run Completed.")
                 {
                     socket.disconnect();
                     socket.off("process_output");
+                    M.toast({html: 'Process Run Completed', classes: "green"})
                 }
+
             });
         }
 
