@@ -38,7 +38,7 @@ def extract_investments(args)->pd.DataFrame:
     if args.company_title:
         df = df[df.title.str.contains(args.company_title)]
 
-    if args.season != 0:
+    if args.season != -1:
         df = df[df.season == args.season]
 
     if args.minimum_valuation:
@@ -60,6 +60,8 @@ def pretty_print(df):
         print("-    Category: {}".format(data["category"]))
         print("-    Description: {}".format(data["description"]))
         print("-    Deal Offered: {}".format("Yes" if data["deal"] else "No"))
+        print("-    Panel: {}, {}, {}, {}, {}".format(data["shark1"], data["shark2"], data["shark3"],
+                                                      data["shark4"], data["shark5"]))
 
 
 if __name__ == '__main__':
