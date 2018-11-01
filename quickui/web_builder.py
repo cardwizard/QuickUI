@@ -10,7 +10,6 @@ from typing import Dict
 from subprocess import Popen, PIPE, CalledProcessError
 from pathlib import Path
 
-import sys
 import threading
 import json
 
