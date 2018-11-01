@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def extract_investments(args)->pd.DataFrame:
-    df = pd.read_csv("..\\examples\\Shark Tank Companies.csv")
+    df = pd.read_csv("examples\\Shark Tank Companies.csv")
 
     df["all_sharks"] = df["shark1"] + df["shark2"] + df["shark3"] + df["shark4"] + df["shark5"]
 
