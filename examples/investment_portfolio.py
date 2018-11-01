@@ -5,8 +5,6 @@
 import argparse
 import pandas as pd
 
-from typing import List
-
 
 def extract_investments(args)->pd.DataFrame:
     df = pd.read_csv("..\\examples\\Shark Tank Companies.csv")
@@ -20,19 +18,19 @@ def extract_investments(args)->pd.DataFrame:
         df = df[df.all_sharks.str.contains("Mark Cuban")]
 
     if args.kevin_leary:
-        df = df[df.all_sharks.str.contains("Kevin Leary")]
+        df = df[df.all_sharks.str.contains("Kevin O'Leary")]
 
     if args.barabara_corcoran:
         df = df[df.all_sharks.str.contains("Mark Cuban")]
 
     if args.lori_greiner:
-        df = df[df.all_sharks.str.contains("Kevin Leary")]
+        df = df[df.all_sharks.str.contains("Lori Greiner")]
 
     if args.robert_herjavec:
-        df = df[df.all_sharks.str.contains("Mark Cuban")]
+        df = df[df.all_sharks.str.contains("Robert Herjavec")]
 
     if args.daymond_johnson:
-        df = df[df.all_sharks.str.contains("Kevin Leary")]
+        df = df[df.all_sharks.str.contains("Daymond John")]
 
     if args.category:
         df = df[df.category.str.contains(args.category)]
@@ -51,7 +49,16 @@ def extract_investments(args)->pd.DataFrame:
 
     return df
 
-
+def pretty_print(df):
+    for data in df.to_dict(orient="records"):
+        print("-------------------------------------")
+        print("Company: {}, {}".format(data["title"], data["location"]))
+        print("-    Website: {}".format(data["website"]))
+        print("-    Entrepreneurs: {}".format(data["entrepreneurs"]))
+        print("-    Valuation: {} (${} for {})".format(data["valuation"], data["askedFor"], data["exchangeForStake"]))
+        print("-    Season: {}".format(data["season"]))
+        print("-    Category: {}".format(data["category"]))
+        print("-    Description: {}".format(data["description"]))
 
 
 if __name__ == '__main__':
@@ -84,7 +91,8 @@ if __name__ == '__main__':
 
 
     args = parser.parse_args()
-    print(args)
-    print(extract_investments(args))
+
+    df = extract_investments(args)
+    pretty_print(df)
 
 
