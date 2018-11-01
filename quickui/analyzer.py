@@ -6,7 +6,7 @@ import ast
 
 from pathlib import Path
 from typing import Union, List, Dict
-from QuickUI.function_support import check_function
+from quickui.function_support import check_function
 
 class IncorrectArgument(Exception):
     pass
