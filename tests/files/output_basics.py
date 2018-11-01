@@ -4,6 +4,8 @@
 
 import argparse
 import time
+from tqdm import tqdm
+
 
 if __name__ == '__main__':
 
@@ -15,7 +17,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    for i in range(10):
+    for i in tqdm(range(10)):
         print(args.check_int)
         time.sleep(2)
         print(args.check_string)
