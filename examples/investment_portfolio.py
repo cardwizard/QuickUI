@@ -7,6 +7,11 @@ import pandas as pd
 
 
 def extract_investments(args)->pd.DataFrame:
+    """
+    Function to extract investments from shark tank dataset
+    :param args:
+    :return:
+    """
     df = pd.read_csv("examples\\Shark Tank Companies.csv")
 
     df["all_sharks"] = df["shark1"] + df["shark2"] + df["shark3"] + df["shark4"] + df["shark5"]
@@ -91,7 +96,6 @@ if __name__ == '__main__':
 
     # Checking the float type check with default value
     parser.add_argument('--minimum-valuation', help="Enter the minimum valuation", type=float, default=1000000.00)
-
 
     args = parser.parse_args()
 
